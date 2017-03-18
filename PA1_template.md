@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 ## Introduction
 
@@ -40,7 +35,8 @@ Dataset: [Activity monitoring data](https://d396qusza40orc.cloudfront.net/repdat
 
 The file "activity.zip" contains the file "activity.csv" that represents the activity monitoring dataset.
 
-```{r}
+
+```r
 data.raw <- read.csv(unz("activity.zip","activity.csv"))
 data.raw$date <- as.Date(data.raw$date)
 ```
@@ -49,21 +45,37 @@ data.raw$date <- as.Date(data.raw$date)
 
 The histogram bellow shows the frequency of steps taken each day
 
-```{r}
+
+```r
 data.steps <- aggregate(steps ~ date, data.raw, sum)
 hist(data.steps$steps, xlab = "Steps taken each day", col=8, main="Histogram")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 The mean and median values are slightly different:
-```{r}
+
+```r
 mean(data.steps$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(data.steps$steps)
+```
+
+```
+## [1] 10765
 ```
 
 ## Average daily activity pattern
 
 The time series plot below shows the daily activity pattern considering the average number of steps taken per 5-minutes interval.
-```{r}
+
+```r
 data.interval <- aggregate(steps ~ interval, data.raw, mean)
 plot(data.interval$interval,data.interval$steps,
      type = "l",
@@ -71,15 +83,23 @@ plot(data.interval$interval,data.interval$steps,
      ylab = "Frequency")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
 The 5-minute interval that, on average, contains the maximum number of steps:
 
-```{r}
+
+```r
 data.interval$interval[data.interval$steps == max(data.interval$steps)]
+```
+
+```
+## [1] 835
 ```
 
 ## Imputing missing values
 All the previous analysis ignored missing values. Now we are going to replicate the original dataset and replace the missing values with the mean for that 5-minute interval.
-```{r}
+
+```r
 countNASteps <- sum(is.na(data.raw$steps))
 data.complete <- data.raw
 naRows <- is.na(data.complete$steps)
@@ -89,9 +109,15 @@ as.integer(data.interval$steps[data.interval$interval==x])
 ```
 
 Here is the histogram of the total number of steps taken each day after missing values replacement.
-```{r}
+
+```r
 data.csteps <- aggregate(steps ~ date, data.complete, sum)
 hist(data.csteps$steps, xlab = "Steps taken each day", col=8, main="Histogram")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+```r
 meanCSteps   <- mean(data.csteps$steps)
 medianCSteps <- median(data.csteps$steps)
 ```
@@ -100,7 +126,8 @@ medianCSteps <- median(data.csteps$steps)
 
 There are differences in activity patterns between weekdays and weekends as you can see bellow.
 
-```{r}
+
+```r
 data.weekdays <- weekdays(data.complete$date)
 data.weekdays[data.weekdays=="Saturday" | data.weekdays=="Sunday"] <- "weekend"
 data.weekdays[data.weekdays!="weekend"] <- "weekday"
@@ -120,3 +147,5 @@ xyplot(steps~interval | datetype, data=data.wsteps,
   ylab = "Average number of steps",
   layout = c(1,2))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
