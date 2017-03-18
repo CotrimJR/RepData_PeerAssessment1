@@ -97,10 +97,19 @@ data.interval$interval[data.interval$steps == max(data.interval$steps)]
 ```
 
 ## Imputing missing values
-All the previous analysis ignored missing values. Now we are going to replicate the original dataset and replace the missing values with the mean for that 5-minute interval.
+All the previous analysis ignored missing values.
+Here is the total of missing values:
 
 ```r
-countNASteps <- sum(is.na(data.raw$steps))
+sum(is.na(data.raw$steps))
+```
+
+```
+## [1] 2304
+```
+Now we are going to replicate the original dataset and replace the missing values with the mean for that 5-minute interval.
+
+```r
 data.complete <- data.raw
 naRows <- is.na(data.complete$steps)
 data.complete$steps[naRows] <- sapply(data.complete$interval[naRows], function(x) {
@@ -115,7 +124,7 @@ data.csteps <- aggregate(steps ~ date, data.complete, sum)
 hist(data.csteps$steps, xlab = "Steps taken each day", col=8, main="Histogram")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ```r
 meanCSteps   <- mean(data.csteps$steps)
@@ -148,4 +157,4 @@ xyplot(steps~interval | datetype, data=data.wsteps,
   layout = c(1,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->

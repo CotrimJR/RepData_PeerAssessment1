@@ -188,9 +188,11 @@ plot(data.interval$interval,data.interval$steps,
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
-<p>All the previous analysis ignored missing values. Now we are going to replicate the original dataset and replace the missing values with the mean for that 5-minute interval.</p>
-<pre class="r"><code>countNASteps &lt;- sum(is.na(data.raw$steps))
-data.complete &lt;- data.raw
+<p>All the previous analysis ignored missing values. Here is the total of missing values:</p>
+<pre class="r"><code>sum(is.na(data.raw$steps))</code></pre>
+<pre><code>## [1] 2304</code></pre>
+<p>Now we are going to replicate the original dataset and replace the missing values with the mean for that 5-minute interval.</p>
+<pre class="r"><code>data.complete &lt;- data.raw
 naRows &lt;- is.na(data.complete$steps)
 data.complete$steps[naRows] &lt;- sapply(data.complete$interval[naRows], function(x) {
 as.integer(data.interval$steps[data.interval$interval==x])
